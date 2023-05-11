@@ -17,8 +17,23 @@
 <script>
 import {defineComponent} from 'vue'
 export default defineComponent({
+  props: {
+    todos: {
+      type: [Object, Array],
+      required: true
+    },
+    removeTodo: {
+      type: Function,
+      required: true
+    },
+    isDoneTodo: {
+      type: Function,
+      required: true
+    }
 
-  props: ['todos', 'removeTodo', 'isDoneTodo'],
+  },
+
+  // props: ['todos', 'removeTodo', 'isDoneTodo'],
   setup() {
     function removeItem(index) {
       this.$emit('removeTodo', index)
