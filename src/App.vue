@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <h1 class="title">
-      {{ data.title }}
+      {{ state.title }}
     </h1>
     <div class="todo">
-      <input v-model="data.todo" type="text" placeholder="type todo..."/>
+      <input v-model="state.todo" type="text" placeholder="type todo..."/>
       <button @click="addTodo">Add todo</button>
-      <to-do-list :todos="data.todos" @removeTodo="removeTodo" @isDoneTodo="isDoneTodo"/>
+      <to-do-list :todos="state.todos" @removeTodo="removeTodo" @isDoneTodo="isDoneTodo"/>
       <hr>
       <p>
-        Список задач: {{ data.todos.length }}
+        Список задач: {{ state.todos.length }}
       </p>
     </div>
   </div>
@@ -19,9 +19,9 @@
 
 import ToDoList from "@/components/ToDoList";
 import {v4 as uuidv4} from 'uuid';
-import {onMounted, ref} from 'vue'
+import {onMounted, reactive } from 'vue'
 
-const data = ref({
+const state = reactive ({
   title: 'ToDo app',
   todo: '',
   todos: [],
@@ -31,33 +31,33 @@ const data = ref({
 
 function addTodo() {
 
-  if (data.value.todo != '') {
-    console.log(data.value.todos)
-    data.value.todos.push({
+  if (state.todo != '') {
+    console.log(state.todos)
+    state.todos.push({
       id: uuidv4(),
-      text: data.value.todo,
+      text: state.todo,
       isComplete: false,
     })
 
-    localStorage.setItem('todos', JSON.stringify(data.value.todos))
+    localStorage.setItem('todos', JSON.stringify(state.todos))
   }
 
-  data.value.todo = '';
+  state.todo = '';
 }
 
 function isDoneTodo() {
-  localStorage.setItem('todos', JSON.stringify(data.value.todos))
+  localStorage.setItem('todos', JSON.stringify(state.todos))
 
 }
 
 function removeTodo(index) {
-  data.value.todos.splice(index, 1);
-  localStorage.setItem('todos', JSON.stringify(data.value.todos))
+  state.todos.splice(index, 1);
+  localStorage.setItem('todos', JSON.stringify(state.todos))
 }
 
 onMounted(() => {
   const arr = localStorage.getItem('todos');
-  arr ? data.value.todos = JSON.parse(arr) : null;
+  arr ? state.todos = JSON.parse(arr) : null;
 })
 
 </script>
