@@ -1,77 +1,65 @@
 <template>
   <div id="app">
     <h1 class="title">
-      {{ title }}
+      {{ data.title }}
     </h1>
-
     <div class="todo">
-      <input v-model="todo" type="text" placeholder="type todo..."/>
+      <input v-model="data.todo" type="text" placeholder="type todo..."/>
       <button @click="addTodo">Add todo</button>
-
-      <to-do-list :todos="todos" @removeTodo="removeTodo" @isDoneTodo="isDoneTodo"/>
-
+      <to-do-list :todos="data.todos" @removeTodo="removeTodo" @isDoneTodo="isDoneTodo"/>
       <hr>
       <p>
-        Список задач: {{ todos.length }}
+        Список задач: {{ data.todos.length }}
       </p>
-
     </div>
-
-
   </div>
 </template>
 
-<script>
-
+<script setup>
 
 import ToDoList from "@/components/ToDoList";
 import {v4 as uuidv4} from 'uuid';
+import {onMounted, ref} from 'vue'
 
+const data = ref({
+  title: 'ToDo app',
+  todo: '',
+  todos: [],
+  isComplete: false,
+  id: null,
+})
 
-export default {
+function addTodo() {
 
-
-
-  data() {
-    return {
-      title: 'ToDo app',
-      todo: '',
-      todos: [],
+  if (data.value.todo != '') {
+    console.log(data.value.todos)
+    data.value.todos.push({
+      id: uuidv4(),
+      text: data.value.todo,
       isComplete: false,
-      id: null,
-    };
-  },
-  mounted() {
-    const data = localStorage.getItem('todos');
-    data ? this.todos = JSON.parse(data) : null;
-  },
-  methods: {
-    addTodo() {
-      if (this.todo != '') {
-        this.todos.push({
-          id: uuidv4(),
-          text: this.todo,
-          isComplete: false,
-        })
+    })
 
-        localStorage.setItem('todos', JSON.stringify(this.todos))
-      }
+    localStorage.setItem('todos', JSON.stringify(data.value.todos))
+  }
 
-      this.todo = '';
-    },
-    isDoneTodo() {
-      localStorage.setItem('todos', JSON.stringify(this.todos))
+  data.value.todo = '';
+}
 
-    },
-    removeTodo(index) {
-      this.todos.splice(index, 1);
-      localStorage.setItem('todos', JSON.stringify(this.todos))
-    }
-  },
-  components: {
-    ToDoList,
-  },
-};
+function isDoneTodo() {
+  localStorage.setItem('todos', JSON.stringify(data.value.todos))
+
+}
+
+function removeTodo(index) {
+  data.value.todos.splice(index, 1);
+  localStorage.setItem('todos', JSON.stringify(data.value.todos))
+}
+
+onMounted(() => {
+  const arr = localStorage.getItem('todos');
+  arr ? data.value.todos = JSON.parse(arr) : null;
+})
+
 </script>
 
 <style lang="scss">

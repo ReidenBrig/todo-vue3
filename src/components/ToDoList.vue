@@ -33,7 +33,6 @@ export default defineComponent({
 
   },
 
-  // props: ['todos', 'removeTodo', 'isDoneTodo'],
   setup() {
     function removeItem(index) {
       this.$emit('removeTodo', index)
@@ -49,15 +48,6 @@ export default defineComponent({
 
 
   },
-/*  methods: {
-    removeItem(index) {
-      this.$emit('removeTodo', index)
-    },
-    isDoneItem() {
-      this.$emit('isDoneTodo')
-
-    }
-  }*/
 })
 </script>
 
