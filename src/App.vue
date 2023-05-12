@@ -56,8 +56,8 @@ function removeTodo(index) {
 }
 
 onMounted(() => {
-  const arr = localStorage.getItem('todos');
-  arr ? state.todos = JSON.parse(arr) : null;
+  const data = localStorage.getItem('todos');
+  data ? state.todos = JSON.parse(data) : null;
 })
 
 </script>
